@@ -6,6 +6,7 @@ BINDIR = $(PREFIX)/bin
 MANDIR = $(PREFIX)/share/man/man1
 SKELDIR = $(PREFIX)/share/$(PN)
 ZSHDIR = $(PREFIX)/share/zsh/site-functions
+DISTFILE = $(PN)-$(VERSION).tar.gz
 RM = rm
 Q = @
 
@@ -40,6 +41,12 @@ uninstall:
 	$(RM) "$(DESTDIR)$(MANDIR)/$(PN).1.gz"
 	$(RM) -rf "$(DESTDIR)$(SKELDIR)"
 	$(RM) "$(DESTDIR)$(ZSHDIR)/_pulseaudio-ctl"
+
+distclean:
+	$(RM) -rf "$(DISTFILE)"
+
+dist:
+	git archive HEAD | gzip > $(DISTFILE)
 
 install: all install-bin install-man
 
