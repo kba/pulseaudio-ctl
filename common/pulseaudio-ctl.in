@@ -115,17 +115,17 @@ checkconfig() {
 
 refreshcurvol() {
   # this worked some versions of PA 4 but is no longer valid with v5
-  # CURVOL=$(pacmd list-sinks|grep -A 15 '* index'| awk '/base volume: /{ print $5 }'|sed 's/%//')
+  # CURVOL=$(pacmd list-sinks|grep -A 15 '\* index'| awk '/base volume: /{ print $5 }'|sed 's/%//')
   [[ $PCV -eq 0 ]] && 
-  CURVOL=$(pacmd list-sinks|grep -A 15 '* index'| awk '/volume: /{ print $3 }' | grep -m 1 % |sed 's/[%|,]//g') ||
-    CURVOL=$(pacmd list-sinks|grep -A 15 '* index'| awk '/volume: front/{ print $5 }' | sed 's/[%|,]//g')
+  CURVOL=$(pacmd list-sinks|grep -A 15 '\* index'| awk '/volume: /{ print $3 }' | grep -m 1 % |sed 's/[%|,]//g') ||
+    CURVOL=$(pacmd list-sinks|grep -A 15 '\* index'| awk '/volume: front/{ print $5 }' | sed 's/[%|,]//g')
 }
 
 setup() {
   SINK=$(pacmd list-sinks|awk '/\* index:/{ print $3 }')
   SOURCE=$(pacmd list-sources|awk '/\* index:/{ print $3 }')
-  MUTED=$(pacmd list-sinks|grep -A 15 '* index'|awk '/muted:/{ print $2 }')
-  SOURCE_MUTED=$(pacmd list-sources|grep -A 15 '* index'|awk '/muted:/{ print $2 }')
+  MUTED=$(pacmd list-sinks|grep -A 15 '\* index'|awk '/muted:/{ print $2 }')
+  SOURCE_MUTED=$(pacmd list-sources|grep -A 15 '\* index'|awk '/muted:/{ print $2 }')
   
   refreshcurvol # sets CURVOL ahead of integer check
 
@@ -183,14 +183,14 @@ case "$1" in
   M|m|[M,m]u|[M,m]ute)
     # mutes the volume entirely
     pactl set-sink-mute "$SINK" toggle
-    MUTED=$(pacmd list-sinks|grep -A 15 '* index'|awk '/muted:/{ print $2 }')
+    MUTED=$(pacmd list-sinks|grep -A 15 '\* index'|awk '/muted:/{ print $2 }')
     [[ $USEN -eq 1 ]] &&
       notify-send -t 1000 --hint=int:transient:1 "Mute toggle" "Muted: $MUTED" --icon=audio-volume-muted
     ;;
   [M,m]i|[M,m]ute-[I,i]nput)
     # mutes the microphone entirely
     pactl set-source-mute "$SOURCE" toggle
-    SOURCE_MUTED=$(pacmd list-sources|grep -A 15 '* index'|awk '/muted:/{ print $2 }')
+    SOURCE_MUTED=$(pacmd list-sources|grep -A 15 '\* index'|awk '/muted:/{ print $2 }')
     [[ $USEN -eq 1 ]] &&
       notify-send -t 1000 --hint=int:transient:1 "Mute toggle" "Muted: $SOURCE_MUTED" --icon=audio-volume-muted
     ;;
